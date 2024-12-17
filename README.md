@@ -27,10 +27,15 @@
 ## Endpoint (ejemplo)
 
 URL:
-GET http://localhost:8080/prices/applicable?applicationDate=2024-06-15&productId=1&brandId=1
+GET http://localhost:8080/prices/applicable?applicationDate=2020-06-15T10:00&productId=35455&brandId=1
 
 Parámetros de Consulta:
 
-- applicationDate: Fecha del precio aplicable (formato yyyy-MM-dd).
+- applicationDate: Fecha y hora del precio aplicable (formato yyyy-MM-dd).
 - productId: ID del producto.
 - brandId: ID de la marca.
+
+
+## Ejecutar APP
+
+- RUN (desde raiz del proyecto): docker compose up -d
