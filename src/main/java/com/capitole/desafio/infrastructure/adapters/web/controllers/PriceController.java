@@ -1,6 +1,6 @@
 package com.capitole.desafio.infrastructure.adapters.web.controllers;
 
-import com.capitole.desafio.application.usecase.PriceService;
+import com.capitole.desafio.application.usecase.PriceUseCase;
 import com.capitole.desafio.domain.model.Price;
 import com.capitole.desafio.infrastructure.adapters.web.dtos.PriceDTO;
 import com.capitole.desafio.infrastructure.adapters.web.mappers.PriceMapper;
@@ -13,28 +13,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/prices")
 class PriceController {
-  private final PriceService priceService;
+  private final PriceUseCase priceService;
   private final PriceMapper priceMapper;
 
   @GetMapping("/applicable")
-  public ResponseEntity<List<PriceDTO>> getApplicablePrice(
+  public ResponseEntity<PriceDTO> getApplicablePrice(
       @RequestParam("applicationDate")
-      @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate applicationDate,
+      @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime applicationDate,
       @RequestParam("productId") Long productId,
       @RequestParam("brandId") Long brandId) {
 
-    List<Price> prices = priceService.findApplicablePrices(applicationDate.atStartOfDay(), productId, brandId);
+    Price price = priceService.findApplicablePrices(applicationDate, productId, brandId);
 
-    List<PriceDTO> applicablePrices = prices.stream()
-        .map(priceMapper::toDTO)
-        .toList();
-
-    return ResponseEntity.ok(applicablePrices);
+    return ResponseEntity.ok(priceMapper.toDTO(price));
   }
 }
